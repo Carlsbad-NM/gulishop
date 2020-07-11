@@ -1,10 +1,20 @@
 <template>
-  <div>666</div>
+  <div>
+    <Header></Header>
+    <Footer></Footer>
+  </div>
 </template>
 
+
 <script>
+import Header from "@/components/Header"
+import Footer from "@/components/Footer"
 export default {
-  name: ""
+  name: "",
+  components: {
+    Header,
+    Footer
+  }
 };
 </script>
 
