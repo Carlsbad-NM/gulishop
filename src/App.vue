@@ -1,19 +1,25 @@
 <template>
   <div>
     <Header></Header>
-    <Footer></Footer>
+    <router-view></router-view>
+    <Footer v-if="!$route.meta.isHide"></Footer>
   </div>
 </template>
 
 
 <script>
-import Header from "@/components/Header"
-import Footer from "@/components/Footer"
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { reqCategoryList } from "@/api";
+
 export default {
   name: "",
   components: {
     Header,
     Footer
+  },
+  mounted() {
+    reqCategoryList();
   }
 };
 </script>
