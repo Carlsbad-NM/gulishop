@@ -1,8 +1,6 @@
 <template>
   <div>
-    Search
-    <br />
-    params参数：{{keyword}} query参数：{{keyword1}}
+    <TypeNav></TypeNav>
   </div>
 </template>
 

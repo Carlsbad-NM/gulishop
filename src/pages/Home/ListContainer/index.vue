@@ -4,28 +4,19 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <SliderLoop :bannerList="bannerList"></SliderLoop>
+        <!-- <div class="swiper-container" ref="banner">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <!-- <img src="./images/banner2.jpg" /> -->
-            </div>
-            <div class="swiper-slide">
-              <!-- <img src="./images/banner3.jpg" /> -->
-            </div>
-            <div class="swiper-slide">
-              <!-- <img src="./images/banner4.jpg" /> -->
+            <div class="swiper-slide" v-for="(banner, index) in bannerList" :key="banner.id">
+              <img :src="banner.imgUrl" />
             </div>
           </div>
-          <!-- 如果需要分页器 -->
+
           <div class="swiper-pagination"></div>
 
-          <!-- 如果需要导航按钮 -->
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
-        </div>
+        </div>-->
       </div>
       <div class="right">
         <div class="news">
@@ -113,8 +104,76 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+// import Swiper from "swiper";
+// import "swiper/css/swiper.min.css";
+
 export default {
-  name: "ListContainer"
+  name: "ListContainer",
+  mounted() {
+    this.getBannerList();
+
+    // 静态数据一上来就加载完成了，页面结构也就形成了，然后创建swiper是有效果的
+    // 而动态数据是异步请求的，mounted里面发送请求之后，立即实例化swiper，此时请求的数据还没回来
+    // new Swiper(this.$refs.banner, {
+    //   // direction: "vertical", // 垂直切换选项
+    //   loop: true, // 循环模式选项
+
+    //   // 如果需要分页器
+    //   pagination: {
+    //     el: ".swiper-pagination"
+    //   },
+
+    //   // 如果需要前进后退按钮
+    //   navigation: {
+    //     nextEl: ".swiper-button-next",
+    //     prevEl: ".swiper-button-prev"
+    //   }
+
+    //   // 如果需要滚动条
+    //   // scrollbar: {
+    //   //   el: ".swiper-scrollbar"
+    //   // }
+    // });
+  },
+  methods: {
+    getBannerList() {
+      this.$store.dispatch("getBannerList");
+    }
+  },
+  computed: {
+    ...mapGetters(["bannerList"])
+  }
+  // watch: {
+  //   bannerList: {
+  //     handler() {
+  //       // Vue.nextTick 和 vm.$nextTick 是一样的功能
+  //       // 在最近的一次dom更新之后执行内部的回调
+  //       this.$nextTick(() => {
+  //         new Swiper(this.$refs.banner, {
+  //           // direction: "vertical", // 垂直切换选项
+  //           loop: true, // 循环模式选项
+
+  //           // 如果需要分页器
+  //           pagination: {
+  //             el: ".swiper-pagination"
+  //           },
+
+  //           // 如果需要前进后退按钮
+  //           navigation: {
+  //             nextEl: ".swiper-button-next",
+  //             prevEl: ".swiper-button-prev"
+  //           }
+
+  //           // 如果需要滚动条
+  //           // scrollbar: {
+  //           //   el: ".swiper-scrollbar"
+  //           // }
+  //         });
+  //       });
+  //     }
+  //   }
+  // }
 };
 </script>
 

@@ -10,7 +10,6 @@
 <script>
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { reqCategoryList } from "@/api";
 
 export default {
   name: "",
@@ -18,8 +17,16 @@ export default {
     Header,
     Footer
   },
+  //本来我们请求三级分类列表的功能是在TypeNav里面去做的
+  //但是放在TypeNav里面 从home切换到search，这个请求会触发两次，而数据又是一样的，所以造成浪费（效率低下）
+  // 因此我们可以优化在app当中去发请求
   mounted() {
-    reqCategoryList();
+    this.getCategoryList();
+  },
+  methods: {
+    getCategoryList() {
+      this.$store.dispatch("getCategoryList");
+    }
   }
 };
 </script>
