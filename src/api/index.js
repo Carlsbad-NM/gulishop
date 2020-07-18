@@ -3,12 +3,16 @@
 import Ajax from '@/ajax/Ajax'
 import mockAjax from '@/ajax/mockAjax'
 
-// 请求获取三级分类列表数据
+// 请求获取三级分类列表数据   get请求
 export const reqCategoryList = () => Ajax({
   url: '/product/getBaseCategoryList',
   method: 'GET'
 })
 
-// 使用mock的接口去请求数据
+// 使用mock的接口去请求数据   get请求
 export const reqBannerList = () => mockAjax.get('/banner')
 export const reqFloorList = () => mockAjax.get('/floor')
+
+
+// 请求search的商品搜索列表数据   post请求
+export const reqGoodsList = (searchParams) => Ajax.post('/list', searchParams)

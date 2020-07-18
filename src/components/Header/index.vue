@@ -50,17 +50,31 @@ export default {
       keyword: ""
     };
   },
+  mounted() {
+    this.$bus.$on("clearKeyword", this.clearKeyword);
+  },
   methods: {
     toSearch() {
-      this.$router.push({
+      let location = {
         name: "search",
-        query: {
-          keyword1: this.keyword.toUpperCase()
-        },
         params: {
+          //如果传递params参数是一个空串，那么路径会有问题，传过去如果是undefined就没事
           keyword: this.keyword || undefined
         }
-      });
+      };
+
+      //点击搜索按钮的时候，我们不能只关注params参数，应该去看看原来有没有query参数
+      //如果有就应该把query参数也带上
+      let { query } = this.$route;
+      if (query) {
+        location.query = query;
+      }
+
+      this.$router.push(location);
+    },
+    // 清楚搜索框关键字
+    clearKeyword() {
+      this.keyword = "";
     }
   }
 };
