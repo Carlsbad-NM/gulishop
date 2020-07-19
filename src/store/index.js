@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import home from './home'
 import search from './search'
+import detail from './detail'
 Vue.use(Vuex)
 
 const state = {
@@ -27,6 +28,7 @@ export default new Vuex.Store({
   getters,
   modules: {
     home,
-    search
+    search,
+    detail
   }
 })

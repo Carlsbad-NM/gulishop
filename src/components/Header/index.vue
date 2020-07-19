@@ -70,7 +70,12 @@ export default {
         location.query = query;
       }
 
-      this.$router.push(location);
+      // 判断是否从首页去search页
+      if (this.$route.path != "/home") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
     // 清楚搜索框关键字
     clearKeyword() {

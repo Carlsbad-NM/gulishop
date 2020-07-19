@@ -26,5 +26,8 @@ VueRouter.prototype.replace = function (location, onResolved, onRejected) {
 
 import routes from '@/router/routes'
 export default new VueRouter({
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  }
 })

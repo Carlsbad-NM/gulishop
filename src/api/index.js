@@ -3,7 +3,7 @@
 import Ajax from '@/ajax/Ajax'
 import mockAjax from '@/ajax/mockAjax'
 
-// 请求获取三级分类列表数据   get请求
+// 请求获取三级分类列表数据   get请求   /api/product/getBaseCategoryList
 export const reqCategoryList = () => Ajax({
   url: '/product/getBaseCategoryList',
   method: 'GET'
@@ -13,6 +13,8 @@ export const reqCategoryList = () => Ajax({
 export const reqBannerList = () => mockAjax.get('/banner')
 export const reqFloorList = () => mockAjax.get('/floor')
 
-
-// 请求search的商品搜索列表数据   post请求
+// 请求search的商品搜索列表数据   post请求   /api/list
 export const reqGoodsList = (searchParams) => Ajax.post('/list', searchParams)
+
+// 请求商品详情数据  get请求   /api/item/{ skuId }
+export const reqGoodsDetailInfo = (skuId) => Ajax.get(`/item/${skuId}`)

@@ -151,7 +151,12 @@ export default {
           location.params = params;
         }
 
-        this.$router.push(location);
+        // 判断是否从首页去search页
+        if (this.$route.path != "/home") {
+          this.$router.replace(location);
+        } else {
+          this.$router.push(location);
+        }
       }
     }
   },
