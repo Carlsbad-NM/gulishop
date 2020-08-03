@@ -25,9 +25,29 @@ VueRouter.prototype.replace = function (location, onResolved, onRejected) {
 }
 
 import routes from '@/router/routes'
-export default new VueRouter({
+import store from '@/store'
+
+const router = new VueRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     return { x: 0, y: 0 }
   }
 })
+
+// 全局前置路由导航守卫
+router.beforeEach((to, from, next) => {
+  let targerPath = to.path
+  if (targerPath.startsWith('/pay') || targerPath.startsWith('/trade') || targerPath.startsWith('/center')) {
+    // 判断用户是否登录
+    if (store.state.user.userInfo.name) {
+      next()
+    } else {
+      // 在登录的路径后面添加之前想要去的路径
+      next('/login?redirect=' + targerPath)
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

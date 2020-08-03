@@ -79,7 +79,7 @@
                 <div class="list-wrap">
                   <div class="p-img">
                     <router-link :to="`/detail/${goods.id}`">
-                      <img :src="goods.defaultImg" />
+                      <img v-lazy="goods.defaultImg" />
                     </router-link>
                     <!-- <a href="item.html" target="_blank">
                       <img :src="goods.defaultImg" />
@@ -116,13 +116,22 @@
               </li>
             </ul>
           </div>
-          <Pagination
+          <el-pagination
+            background
+            :current-page="searchParams.pageNo"
+            :page-size="searchParams.pageSize"
+            layout=" prev, pager, next, jumper,->,total"
+            :total="goodsListInfo.total"
+            :pager-count="7"
+            @current-change="changePage"
+          ></el-pagination>
+          <!-- <Pagination
             :currentPageNum="searchParams.pageNo"
             :pageSize="searchParams.pageSize"
             :total="goodsListInfo.total"
             :continueNum="5"
             @changePage="changePage"
-          ></Pagination>
+          ></Pagination>-->
         </div>
       </div>
     </div>
@@ -147,8 +156,8 @@ export default {
         pageNo: 1,
         pageSize: 4,
         props: [],
-        trademark: ""
-      }
+        trademark: "",
+      },
     };
   },
   beforeMount() {
@@ -171,7 +180,7 @@ export default {
         category1Id,
         category2Id,
         category3Id,
-        categoryName
+        categoryName,
       } = this.$route.query;
       // 2、拿到的这些参数可能有可能没有，需要判断
       // 这次不判断，直接全部拷贝到一个新对象中
@@ -181,10 +190,10 @@ export default {
         category2Id,
         category3Id,
         categoryName,
-        keyword
+        keyword,
       };
       // 3、过滤这个对象当中没有数据的属性
-      Object.keys(searchParams).forEach(item => {
+      Object.keys(searchParams).forEach((item) => {
         if (!searchParams[item]) {
           delete searchParams[item];
         }
@@ -260,11 +269,11 @@ export default {
     changePage(num) {
       this.searchParams.pageNo = num;
       this.getGoodsListInfo();
-    }
+    },
   },
   computed: {
     ...mapState({
-      goodsListInfo: state => state.search.goodsListInfo
+      goodsListInfo: (state) => state.search.goodsListInfo,
     }),
     ...mapGetters(["goodsList"]),
     // 优化
@@ -273,19 +282,19 @@ export default {
     },
     sortType() {
       return this.searchParams.order.split(":")[1];
-    }
+    },
   },
   watch: {
     $route() {
       this.handlerSearchParams();
       // 再次发送请求获取新的参数搜索
       this.getGoodsListInfo();
-    }
+    },
   },
 
   components: {
-    SearchSelector
-  }
+    SearchSelector,
+  },
 };
 </script>
 

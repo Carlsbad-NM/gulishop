@@ -5,7 +5,13 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+
+          <p v-if="userInfo.name">
+            <a href="javascript:;">{{userInfo.name}}</a>
+            <a href="javascript:;" class="register" @click="logout">退出</a>
+          </p>
+
+          <p v-else>
             <span>请</span>
             <!-- <a href="###">登录</a> -->
             <router-link to="/login">登录</router-link>
@@ -14,8 +20,10 @@
           </p>
         </div>
         <div class="typeList">
-          <a href="###">我的订单</a>
-          <a href="###">我的购物车</a>
+          <!-- <a href="###">我的订单</a> -->
+          <router-link to="/center">我的订单</router-link>
+          <!-- <a href="###">我的购物车</a> -->
+          <router-link to="/shopcart">我的购物车</router-link>
           <a href="###">我的尚品汇</a>
           <a href="###">尚品汇会员</a>
           <a href="###">企业采购</a>
@@ -43,12 +51,18 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Header",
   data() {
     return {
-      keyword: ""
+      keyword: "",
     };
+  },
+  computed: {
+    ...mapState({
+      userInfo: (state) => state.user.userInfo,
+    }),
   },
   mounted() {
     this.$bus.$on("clearKeyword", this.clearKeyword);
@@ -59,8 +73,8 @@ export default {
         name: "search",
         params: {
           //如果传递params参数是一个空串，那么路径会有问题，传过去如果是undefined就没事
-          keyword: this.keyword || undefined
-        }
+          keyword: this.keyword || undefined,
+        },
       };
 
       //点击搜索按钮的时候，我们不能只关注params参数，应该去看看原来有没有query参数
@@ -80,8 +94,18 @@ export default {
     // 清楚搜索框关键字
     clearKeyword() {
       this.keyword = "";
-    }
-  }
+    },
+    // 退出登录
+    async logout() {
+      try {
+        await this.$store.dispatch("userLogout");
+        alert("退出成功");
+        this.$router.push("/home");
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+  },
 };
 </script>
 

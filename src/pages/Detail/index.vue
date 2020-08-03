@@ -16,9 +16,9 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+          <Zoom :imgList="skuInfo.skuImageList" />
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList :imgList="skuInfo.skuImageList" />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -69,20 +69,21 @@
                 <dt class="title">{{item.saleAttrName}}</dt>
                 <dd
                   changepirce="0"
-                  class="active"
+                  :class="{active:attrValue.isChecked === '1'}"
                   v-for="(attrValue, index) in item.spuSaleAttrValueList"
                   :key="attrValue.id"
+                  @click="changeActive(item.spuSaleAttrValueList,index)"
                 >{{attrValue.saleAttrValueName}}</dd>
               </dl>
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum" />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a href="javascript:" class="mins" @click="skuNum>1?skuNum--:1">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:;" @click="toSuccess">加入购物车</a>
               </div>
             </div>
           </div>
@@ -327,12 +328,37 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Detail",
+  data() {
+    return {
+      skuNum: 1
+    };
+  },
   mounted() {
     this.getGoodsDetailInfo();
   },
   methods: {
     getGoodsDetailInfo() {
       this.$store.dispatch("getGoodsDetailInfo", this.$route.params.goodsId);
+    },
+    changeActive(attrValueList, index) {
+      attrValueList.forEach(item => {
+        item.isChecked = "0";
+      });
+      attrValueList[index].isChecked = "1";
+    },
+    async toSuccess() {
+      // 调用actions内部的异步函数(async)，这个调用的返回值一定是一个promise
+      try {
+        const result = await this.$store.dispatch("addOrUpdateShopCart", {
+          skuId: this.skuInfo.id,
+          skuNum: this.skuNum
+        });
+        sessionStorage.setItem("SKUINFO_KEY", JSON.stringify(this.skuInfo));
+        // 如果添加购物车成功就跳转页面
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum} `);
+      } catch (error) {
+        alert(error.message);
+      }
     }
   },
   computed: {
@@ -540,7 +566,7 @@ export default {
 
               .mins {
                 right: -8px;
-                top: 19px;
+                bottom: 0;
                 border-top: 0;
               }
 
